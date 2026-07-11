@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FL Studio分片合并</title>
-  <style>
-    .container{width:100%;max-width:700px;margin:40px auto;padding:0 20px;}
-    .panel{display:flex;justify-content:flex-end;}
-    #download-exe-btn{padding:10px 20px;font-size:16px;cursor:pointer;background:#2378e6;color:#fff;border:none;border-radius:6px;}
-    #download-exe-btn:disabled{background:#999;cursor:not-allowed;}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL Studio 在线合并</title>
+<style>
+.container{max-width:700px;margin:40px auto;padding:0 20px;}
+.panel{display:flex;justify-content:flex-end;}
+#mergeBtn{padding:10px 20px;font-size:16px;background:#2378e6;color:#fff;border:none;border-radius:6px;cursor:pointer;}
+#mergeBtn:disabled{background:#999;cursor:not-allowed;}
+</style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <div class="panel">
-      <button id="download-exe-btn" onclick="downloadExe()">选择分片并合并下载（.zip）</button>
+        <button id="mergeBtn" onclick="downloadAllMerge()">一键下载并合并</button>
     </div>
-  </div>
+</div>
 <script src="script.js"></script>
 </body>
 </html>
