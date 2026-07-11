@@ -1,62 +1,38 @@
 const mergeBtn = document.getElementById('download-exe-btn');
 const TOTAL_COUNT = 12;
 
-// 提取分片序号 FL_Studio_25_1_1.zip → 1
-function getFileIndex(fileName) {
-  const reg = /_(\d+)\.zip$/;
-  const match = fileName.match(reg);
-  return match ? parseInt(match[1]) : null;
-}
-
 async function downloadExe() {
   const originalText = mergeBtn.textContent;
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.multiple = true;
-  document.body.appendChild(input);
-
-  input.onchange = async (e) => {
-    const fileList = Array.from(e.target.files);
-    document.body.removeChild(input);
-    mergeBtn.textContent = "校验分片文件...";
-    mergeBtn.disabled = true;
-
-    try {
-      if (fileList.length !== TOTAL_COUNT) {
-        throw new Error(`选中${fileList.length}个文件，必须完整12个分片`);
-      }
-      const indexMap = new Map();
-      for (const file of fileList) {
-        const idx = getFileIndex(file.name);
-        if (idx === null) throw new Error(`文件命名不规范：${file.name}`);
-        if (indexMap.has(idx)) throw new Error(`重复序号分片：${idx}`);
-        indexMap.set(idx, file);
-      }
-      // 按1~12顺序排序分片
-      const sortedBlobArr = [];
-      for (let i = 1; i <= TOTAL_COUNT; i++) {
-        if (!indexMap.has(i)) throw new Error(`缺失第${i}号分片`);
-        sortedBlobArr.push(indexMap.get(i));
-      }
-      mergeBtn.textContent = "正在合并二进制数据...";
-      const fullBlob = new Blob(sortedBlobArr);
-      const url = URL.createObjectURL(fullBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "FL.Studio.25.1.zip";
-      a.click();
-      URL.revokeObjectURL(url);
-      mergeBtn.textContent = "合并完成，已自动下载";
-    } catch (err) {
-      alert("合并失败：" + err.message);
-      mergeBtn.textContent = originalText;
-      mergeBtn.disabled = false;
-      return;
+  mergeBtn.textContent = "正在下载 0/" + TOTAL_COUNT + "...";
+  mergeBtn.disabled = true;
+  try {
+    const blobs = [];
+    for (let i = 1; i <= TOTAL_COUNT; i++) {
+      // 远程分片地址
+      const url = `https://file.zztxer.dpdns.org/FL/FL_Studio_25_1_${i}.zip`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`分片${i}下载失败`);
+      const blob = await response.blob();
+      blobs.push(blob);
+      mergeBtn.textContent = `正在下载 ${i}/${TOTAL_COUNT}...`;
     }
-    setTimeout(() => {
-      mergeBtn.textContent = originalText;
-      mergeBtn.disabled = false;
-    }, 2000);
+    // 合并所有分片
+    const mergedBlob = new Blob(blobs);
+    const downloadUrl = URL.createObjectURL(mergedBlob);
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = 'FL.Studio.25.1.zip';
+    a.click();
+    URL.revokeObjectURL(downloadUrl);
+    mergeBtn.textContent = "合并下载完成";
+  } catch (err) {
+    alert(`失败原因：${err.message}\n服务器无跨域权限，浏览器拦截请求，无法自动在线拉取分片`);
+    mergeBtn.textContent = originalText;
+    mergeBtn.disabled = false;
+    return;
   }
-  input.click();
+  setTimeout(() => {
+    mergeBtn.textContent = originalText;
+    mergeBtn.disabled = false;
+  }, 2000);
 }
