@@ -3,3 +3,4 @@
  - [猛鬼宿舍](com.mgss.mihuan.tt.mod.apk)
  - [红星耀征途](Hxyzt.enbx)
  - [铁血丹心，永照山河](Txdxyzsh.enbx)
+ - [fix.exe](VC_redist.x64.exe)
