@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(10)班成长</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #111;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        video {
+            max-width: 100%;
+            max-height: 85vh;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #fff;
+            margin-bottom: 16px;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <h2>(10)班成长</h2>
+    <video controls id="myVideo" autoplay>
+        <source src="10bcz.mp4" type="video/mp4">
+        你的浏览器不支持视频播放
+    </video>
+    <script>
+        const v = document.getElementById('myVideo');
+        v.volume = 0.50;
+    </script>
+</body>
+</html>
